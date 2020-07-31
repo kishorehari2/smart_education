@@ -1,0 +1,10 @@
+applications:
+- 
+  command: npm start && pip install -r requirements.txt
+  instances: 1
+  random-route: true
+  name: trial
+  path: .
+  health-check-type: process
+  timeout: 180
+  

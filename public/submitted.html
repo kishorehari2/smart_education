@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Submitted</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <script>
+        document.addEventListener("DOMContentLoaded", init, false);
+
+        function init() {
+            document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+            selDiv = document.querySelector("#selectedFiles");
+
+        }
+        var f, files, attach;
+        // var attach;
+        function handleFileSelect(e) {
+
+            if (!e.target.files) return;
+
+            selDiv.innerHTML = "";
+
+            files = e.target.files;
+
+
+
+            var file = files[0]
+            var fileReader = new FileReader();
+
+            fileReader.onload = function (fileLoadedEvent) {
+                var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+
+                const temp = srcData.substring(23);
+                // console.log(temp)
+                //const filename = "pic1.png";
+                attach = { "pic1.png": { 'data': temp } };
+                console.log(temp)
+            }
+            fileReader.readAsDataURL(file);
+
+            console.log(attach)
+
+
+
+
+        }
+
+        function handleClick() {
+
+            console.log(attach)
+            axios.request({
+                method: 'post',
+                url: '/api/train/',
+                data: {
+                    username: "teststudent",
+
+                    _attachments: attach
+
+                }
+            }).then(response => {
+                const user = response.data.username;
+                const id = response.data.id;
+                axios.get('/train?username=' + user + '&id=' + id).then(response => {
+                    console.log('in response')
+                    console.log(response.data)
+                    alert('Success!! You will be redirected to login page')
+                    window.location.replace("/")
+                }).catch(function (error) {
+                    console.log('error')
+                    console.log(error)
+                });
+
+
+            }).catch(err => {
+                alert(err)
+                console.log(err)
+            });
+            return false; // prevent further bubbling of event
+
+        }
+
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Thank you for registering! Please follow below steps to complete your profiling</h1>
+    <!--<p>You just submitted your form, we will start reviewing your application shortly<p> -->
+    <h2>Please upload 3 of your pics. This will be stored in our database to verify your identity
+        while doing the assessment
+    </h2>
+    <form id="myForm" method="post" onsubmit="return handleClick()" enctype="multipart/form-data">
+
+        Files: <input type="file" id="files" name="files" multiple><br />
+
+        <div id="selectedFiles"></div>
+
+        <input type="submit">
+    </form>
+</body>

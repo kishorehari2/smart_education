@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+
+    <link href="/stylecss.css" rel='stylesheet' type="text/css">
+    <link href="/normal.css" rel='stylesheet' type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript">
+
+        function handleClick() {
+
+            const role = document.getElementById("role").value;
+            console.log(role)
+            data = {
+                'user_name': document.getElementById("username").value,
+                'full_name': document.getElementById("fullname").value, 'role': document.getElementById("role").value,
+                'email': document.getElementById("Email").value, 'number': document.getElementById("Phone").value,
+                'password': document.getElementById("password").value,
+                //'birthday': document.getElementById("birthday").value,
+                'gender': document.getElementById("gender").value
+            }
+            console.log(data)
+            axios.request({
+                method: 'post',
+                url: '/api/login/',
+                data: data
+            }).then(response => {
+                console.log(role)
+                
+                    alert('Sign Up success!! Please login to continue')
+                    window.location.replace("/");
+               
+
+
+            }).catch(err => console.log(err))
+            //window.location.href = "/";
+
+            return false; // prevent further bubbling of event
+
+        }
+
+
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <form onsubmit="return handleClick()" target="" id="signup" method="POST">
+        <h1>Sign-Up form</h1>
+        <fieldset>
+            <label for="role">ROLE: </label>
+            <select name="role" id="role">
+                <option value="student" selected>Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+            <legend>
+                <h2>Enter your personal details: </h2>
+            </legend>
+            <label for="name">Full Name: </label>
+            <input type="text" name="FullName" id="fullname" required autofocus placeholder="Enter your name">
+            <br><br>
+            <label for="username">Username: </label>
+            <input type="text" name="username" id="username" required placeholder="Enter your Username">
+            <label for="Email">E-mail: </label>
+            <input type="email" name="Email" id="Email" required placeholder="Enter your E-Mail ID">
+            <br><br>
+            <label for="Phone">Phone Number: </label>
+            <input type="tel" name="Number" id="Phone" required placeholder="Enter your Phone Number">
+            <label for="password">Password: </label>
+            <input type="password" name="password" id="password" min="6" max="16" required placeholder="Choose Password"
+                title="Please enter valid password">
+            <br><br>
+            <label for="birthday">Birthday: </label>
+            <input type="date" id="birthday" name="birthday">
+            <label for="gender">Gender: </label>
+            <select name="Gender" id="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Consider not to say">Consider Not to Say</option>
+            </select>
+            <br><br>
+        </fieldset>
+        <button type="submit">Sign Up</button>
+
+    </form>
+
+
+</body>
+
+</html>
